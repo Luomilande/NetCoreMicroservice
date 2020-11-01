@@ -15,9 +15,7 @@ namespace Order.API.Helper
         /// 服务注册到consul
         /// </summary>
         /// <param name="app"></param>
-        /// <param name="configuration"></param>
         /// <param name="lifetime"></param>
-        /// <returns></returns>
         public static IApplicationBuilder RegisterConsul(this IApplicationBuilder app, IConfiguration configuration, IHostApplicationLifetime lifetime)
         {
             var consulClient = new ConsulClient(c =>
@@ -49,6 +47,7 @@ namespace Order.API.Helper
             {
                 consulClient.Agent.ServiceDeregister(registration.ID).Wait();
             });
+
 
             return app;
         }

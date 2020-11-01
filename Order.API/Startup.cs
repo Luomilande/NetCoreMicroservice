@@ -37,8 +37,6 @@ namespace Order.API
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseHttpsRedirection();
-
             app.UseRouting();
 
             app.UseAuthorization();
@@ -47,6 +45,7 @@ namespace Order.API
             {
                 endpoints.MapControllers();
             });
+
             //ЗўЮёзЂВс
             app.RegisterConsul(Configuration, lifetime);
         }

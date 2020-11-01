@@ -10,7 +10,7 @@ namespace Product.API.Controllers
 {
     [Route("[controller]")]
     [ApiController]
-    public class ProductsController : Controller
+    public class ProductsController : ControllerBase
     {
         private readonly ILogger<ProductsController> _logger;
         private readonly IConfiguration _configuration;
