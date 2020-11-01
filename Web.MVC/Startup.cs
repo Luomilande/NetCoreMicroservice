@@ -27,7 +27,7 @@ namespace Web.MVC
             services.AddControllersWithViews();
 
             //注入IServiceHelper
-            services.AddSingleton<IServiceHelper, ServiceHelper>();
+            services.AddSingleton<IServiceHelper, GatewayServiceHelper>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -55,7 +55,7 @@ namespace Web.MVC
             });
 
             //程序启动时 获取服务列表
-            serviceHelper.GetServices();
+            //serviceHelper.GetServices();
         }
     }
 }
