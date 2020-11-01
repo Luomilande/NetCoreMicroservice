@@ -24,20 +24,20 @@ namespace Order.API.Helper
                 c.Address = new Uri(configuration["ConsulSetting:ConsulAddress"]);
             });
 
-            var registration = new AgentServiceRegistration()
+            var registration = new AgentServiceRegistration();
+
+            registration.ID = Guid.NewGuid().ToString();//服务实例唯一标识
+            registration.Name = configuration["ConsulSetting:ServiceName"];//服务名
+            registration.Address = configuration["ConsulSetting:ServiceIP"];//服务IP
+            registration.Port = int.Parse(configuration["ConsulSetting:ServicePort"]);//服务端口 因为要运行多个实例，端口不能在appsettings.json里配置，在docker容器运行时传入
+            registration.Check = new AgentServiceCheck()
             {
-                ID = Guid.NewGuid().ToString(),//服务实例唯一标识
-                Name = configuration["ConsulSetting:ServiceName"],//服务名
-                Address = configuration["ConsulSetting:ServiceIP"], //服务IP
-                Port = int.Parse(configuration["ConsulSetting:ServicePort"]),//服务端口 因为要运行多个实例，端口不能在appsettings.json里配置，在docker容器运行时传入
-                Check = new AgentServiceCheck()
-                {
-                    DeregisterCriticalServiceAfter = TimeSpan.FromSeconds(5),//服务启动多久后注册
-                    Interval = TimeSpan.FromSeconds(10),//健康检查时间间隔
-                    HTTP = $"http://{configuration["ConsulSetting:ServiceIP"]}:{configuration["ConsulSetting:ServicePort"]}{configuration["ConsulSetting:ServiceHealthCheck"]}",//健康检查地址
-                    Timeout = TimeSpan.FromSeconds(5)//超时时间
-                }
+                DeregisterCriticalServiceAfter = TimeSpan.FromSeconds(5),//服务启动多久后注册
+                Interval = TimeSpan.FromSeconds(10),//健康检查时间间隔
+                HTTP = $"http://{configuration["ConsulSetting:ServiceIP"]}:{configuration["ConsulSetting:ServicePort"]}{configuration["ConsulSetting:ServiceHealthCheck"]}",//健康检查地址
+                Timeout = TimeSpan.FromSeconds(5)//等待时间
             };
+
 
             //服务注册
             consulClient.Agent.ServiceRegister(registration).Wait();
@@ -47,7 +47,6 @@ namespace Order.API.Helper
             {
                 consulClient.Agent.ServiceDeregister(registration.ID).Wait();
             });
-
 
             return app;
         }

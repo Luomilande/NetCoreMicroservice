@@ -15,9 +15,6 @@ namespace Order.API.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        public IActionResult Get()
-        {
-            return Ok();
-        }
+        public IActionResult Get() => Ok();
     }
 }
